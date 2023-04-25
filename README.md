@@ -28,9 +28,11 @@ typedef struct sigaltstack stack_t;
 #endif
 ```
 
-Proper fixup:
+## Proper fixup:
 https://github.com/openwrt/openwrt/commit/aa2d61eced0f63105fe663f65d4fc542c6da4aed#diff-e99b937718df0a2d738dfaed68a3ea88025e1e0f865c6e4b23a906e8cb11e8b9
 
+## Issue link:
+https://github.com/openwrt/openwrt/issues/9055
 
 ```shell
 https://docs.onion.io/omega2-docs/cross-compiling.html
