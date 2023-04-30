@@ -81,16 +81,10 @@ USER omega
 WORKDIR ${USERHOME}
 RUN git clone https://github.com/OnionIoT/source.git
 WORKDIR ${USERSOURCE}
-# start config process
-# Set SDK environment for Omega2
-# For Omega2+ change the third echo line with: (notice the 'p' for plus)
-#  echo "CONFIG_TARGET_ramips_mt7688_DEVICE_omega2p=y" > .config && \
 RUN pwd
+# configure and fix issues wit compillation
 RUN git apply --whitespace=warn ../*.patch
 RUN cp ../config ./.config
+# build
 RUN make
-#RUN sudo make install
 
-
-
-# start build process
