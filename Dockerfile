@@ -1,5 +1,7 @@
 FROM ubuntu
 LABEL OMEGA build container
+ARG USERHOME=/home/workspace/omega_home
+ARG USERSOURCE=${USERHOME}/source
 
 RUN apt-get update
 RUN apt-get install -y \
@@ -66,13 +68,23 @@ RUN gcc --version
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
-RUN mkdir -p /home/workspace/omega_home
+RUN mkdir -p ${USERHOME}
 
 RUN groupadd -g $GROUP_ID omega_root
-RUN useradd -u $USER_ID -g $GROUP_ID -s /bin/bash -d /home/workspace/omega_home omega
-RUN chown -R ${GROUP_ID}:${USER_ID} /home/workspace/omega_home
+RUN useradd -u $USER_ID -g $GROUP_ID -s /bin/bash -d ${USERHOME} omega
+RUN chown -R ${GROUP_ID}:${USER_ID} ${USERHOME}
+COPY --chown=${USER_ID}:${USER_ID} *.patch ${USERHOME}
+COPY --chown=${USER_ID}:${USER_ID} config ${USERHOME}
 
 USER omega
 
-WORKDIR /home/workspace/omega_home
+WORKDIR ${USERHOME}
 RUN git clone https://github.com/OnionIoT/source.git
+WORKDIR ${USERSOURCE}
+RUN pwd
+# configure and fix issues wit compillation
+RUN git apply --whitespace=warn ../*.patch
+RUN cp ../config ./.config
+# build
+RUN make
+
